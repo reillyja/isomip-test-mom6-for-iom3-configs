@@ -19,3 +19,19 @@ module load intel-compiler/2021.8.0
 module load openmpi/4.1.4
 module load netcdf/4.9.2
 ```
+
+### Debugging plots
+
+To generate quick diagnostics for NUOPC mask issues and grounding-cell failures, run:
+
+```bash
+cd /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs
+python tools/isomip_error_diagnostics.py
+```
+
+This writes figures and a text summary to `diagnostics/`, including:
+
+- ocean/shelf geometry and cavity thickness
+- full versus cavity-masked ESMF mesh masks
+- logged grounding/error points from `access-om3.err` or `work/warnfile.000000.out`
+- placeholder forcing fields overlaid with the failure points

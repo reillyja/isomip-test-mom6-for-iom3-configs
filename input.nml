@@ -1,24 +1,18 @@
-
- &fms_nml
-    domains_stack_size = 960000,
-    clock_grain='ROUTINE',
-    stack_size = 0  /
-
- &ocean_solo_nml
-        months = 3,
-        days   = 0,
-        hours  = 0,
-        minutes = 0,
-        seconds = 0,
-        date_init = 1,1,1,0,0,0,
-        calendar = 'NOLEAP' /
-
  &MOM_input_nml
-    output_directory = './',
-    input_filename = 'n',
-    restart_input_dir = 'INPUT/',
-    restart_output_dir = 'RESTART/',
-    parameter_filename = 'MOM_input', 'MOM_override' /
+         output_directory = './',
+         input_filename = 'n',
+         restart_input_dir = 'INPUT/',
+         restart_output_dir = 'RESTART/',
+         parameter_filename = 'MOM_input',
+                              'MOM_override' /
 
  &diag_manager_nml
-    flush_nc_files = .true. /
+         flush_nc_files = .true.
+         max_axes = 400
+         max_files = 200
+         max_num_axis_sets = 200 /
+
+ &fms_nml
+         clock_grain = 'LOOP',
+         domains_stack_size = 710000,
+         stack_size = 0 /

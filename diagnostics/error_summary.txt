@@ -1,0 +1,15 @@
+ISOMIP NUOPC Error Diagnostics
+
+Grounding/error points parsed: 5
+  1. lon=517.000 km, lat=1.000 km
+  2. lon=519.000 km, lat=1.000 km
+  3. lon=521.000 km, lat=1.000 km
+  4. lon=523.000 km, lat=1.000 km
+  5. lon=525.000 km, lat=1.000 km
+
+Under-shelf wet cells: 6720
+Under-shelf cells exposed by full OCN mesh: 6720
+Under-shelf cells exposed by ATM mesh: 0
+Under-shelf cells exposed by ROF mesh: 0
+
+No PET NaN counts found.

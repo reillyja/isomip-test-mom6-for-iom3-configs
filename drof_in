@@ -1,0 +1,9 @@
+&drof_nml
+  datamode = "copyall"
+  model_maskfile = "./INPUT/JRA55do-drof-ESMFmesh.nc"
+  model_meshfile = "./INPUT/JRA55do-drof-ESMFmesh.nc"
+  nx_global = 240
+  ny_global = 40
+  restfilm = "null"
+  skip_restart_read = .false.
+/
