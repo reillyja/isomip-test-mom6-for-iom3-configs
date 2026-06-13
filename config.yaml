@@ -1,27 +1,42 @@
-# change to your project with compute time available
-project: g40
-queue: normal
+project: au88
+shortpath: /scratch/au88
+laboratory: mom6-isomip
+
+modules:
+  use:
+    - /g/data/vk83/prerelease/modules
+  load:
+    - access-om3/pr218-3
+
+queue: normalsr
 walltime: 01:00:00
 jobname: mom6_isomip
 ncpus: 48
 jobfs: 10GB
 
-# change to a project you have access to
-shortpath: /scratch/x77
-
 model: mom6
+exe: mom6-solo
 input:
-    - /g/data/x77/cy8964/idealised-mom6-control/Ocean0_NK36_for_iom3/INPUT
-exe: /scratch/x77/cy8964/mom6/setup-mom6-nci-executable/only_mom6_symmetric/MOM6 
+  - ./INPUT
 
 collate: false
-runlog: true
+runlog: false
+metadata:
+  enable: false
+
 storage:
+  scratch:
+    - au88
   gdata:
-    - ik11
+    - au88
+    - vk83
 
 platform:
-  nodesize: 48
+  nodesize: 104
+  nodemem: 512
 
 mpi:
-  module: openmpi/4.1.2
+  module: openmpi/4.1.7
+
+qsub_flags: -W umask=027
+payu_minimum_version: 1.3.2

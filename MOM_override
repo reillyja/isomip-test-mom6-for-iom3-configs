@@ -10,6 +10,10 @@
 ! Change depth over which surface fluxes added
 #override MINIMUM_FORCING_DEPTH = 1
 
+! Avoid per-step grounding reports for residual boundary fluxes. MOM6 still
+! clips the flux and records the correction in the created_H diagnostic.
+#override IGNORE_FLUXES_OVER_LAND = True
+
 ! Eliminate melting when ocean thickness too thin
 #override COL_THICK_MELT_THRESHOLD = 10.0
 
@@ -41,9 +45,6 @@
 #override UTIDE = 0.01
 #override CDRAG_SHELF = 0.025
 
-! turn on ice shelf heat conduction
-#override SHELF_INSULATOR = True
-
 ! Add drag (can increases time before crashing but not always, depending on other parameters)
 #override LINEAR_DRAG = True
 #override DRAG_BG_VEL = 0.05
@@ -51,7 +52,6 @@
 ! sampling and distribution of meltwater = 1m
 #override HMIX_SFC_PROP = 1
 !#override HMIX_UV_SFC_PROP = 1 ! has indexing issue, but default is zero (i.e. velocity in fric vel calcaultion seems to be top layer velocity + minimum velocity USTAR_SHELF_BG. PR in ACCESS-NRI MOM6 version has fix
-#override MINIMUM_FORCING_DEPTH = 1
 
 ! ISOMIP+ diffusivity and viscosity
 #override KH = 6.0
@@ -60,9 +60,9 @@
 #override KV = 1.0E-03
 
 ! TIME STEP
-#override DT = 720
-#override DT_THERM = 720
-#override DT_FORCING = 720
+#override DT = 300
+#override DT_THERM = 300
+#override DT_FORCING = 300
 
 ! SHEAR MIXING
 #override USE_JACKSON_PARAM = True
@@ -96,7 +96,6 @@ DTFREEZE_DP = -7.53E-08         !   [deg C Pa-1] default = 0.0
 #override ISOMIP_T_SUR = -1.9
 #override ISOMIP_S_BOT = 34.7
 #override ISOMIP_S_TOP = 33.8
-#override CDRAG_SHELF = 0.025
 
 ! Use ISOMIP+ Ocean0 warm sponge
 #override SPONGE = True
@@ -111,4 +110,3 @@ ISOMIP_T_SUR_SPONGE = -1.9      !   [degC] default = 10.0
                                 ! Surface temperature in sponge layer.
 ISOMIP_T_BOT_SPONGE = 1      !   [degC] default = 10.0
                                 ! Bottom temperature in sponge layer.
-

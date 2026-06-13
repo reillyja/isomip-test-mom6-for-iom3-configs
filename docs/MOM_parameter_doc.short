@@ -4,11 +4,11 @@
 USE_REGRIDDING = True           !   [Boolean] default = False
                                 ! If True, use the ALE algorithm (regridding/remapping). If False, use the
                                 ! layered isopycnal algorithm.
-DT = 720.0                      !   [s]
+DT = 300.0                      !   [s]
                                 ! The (baroclinic) dynamics time step.  The time-step that is actually used will
                                 ! be an integer fraction of the forcing time-step (DT_FORCING in ocean-only mode
                                 ! or the coupling timestep in coupled mode.)
-DTBT_RESET_PERIOD = 0.0         !   [s] default = 720.0
+DTBT_RESET_PERIOD = 0.0         !   [s] default = 300.0
                                 ! The period between recalculations of DTBT (if DTBT <= 0). If DTBT_RESET_PERIOD
                                 ! is negative, DTBT is set based only on information available at
                                 ! initialization.  If 0, DTBT will be set every dynamics time step. The default
@@ -218,7 +218,7 @@ SHELF_INSULATOR = True          !   [Boolean] default = False
                                 ! If true, the ice shelf is a perfect insulator (no conduction).
 ICE_SHELF_TEMPERATURE = -20.0   !   [degC] default = -15.0
                                 ! The temperature at the center of the ice shelf.
-DT_FORCING = 720.0              !   [s] default = 0.0
+DT_FORCING = 300.0              !   [s] default = 0.0
                                 ! The time step for changing forcing, coupling with other components, or
                                 ! potentially writing certain diagnostics. The default value is given by DT.
 COL_THICK_MELT_THRESHOLD = 10.0 !   [m] default = 0.0
@@ -506,6 +506,11 @@ USE_JACKSON_PARAM = True        !   [Boolean] default = False
 
 ! === module MOM_diabatic_aux ===
 ! The following parameters are used for auxiliary diabatic processes.
+IGNORE_FLUXES_OVER_LAND = True  !   [Boolean] default = False
+                                ! If true, the model does not check if fluxes are being applied over land
+                                ! points. This is needed when the ocean is coupled with ice shelves and sea ice,
+                                ! since the sea ice mask needs to be different than the ocean mask to avoid sea
+                                ! ice formation under ice shelves. This flag only works when use_ePBL = True.
 
 ! === module MOM_energetic_PBL ===
 USE_MLD_ITERATION = False       !   [Boolean] default = True

@@ -3934,7 +3934,7 @@
 "total_net_massin"  [Unused]
     ! modules: ocean_model
     ! dimensions: scalar
-    ! long_name: Area integrated mass entering ocean due to predip, runoff, ice melt
+    ! long_name: Area integrated mass entering ocean due to precip, runoff, ice melt
     ! units: kg s-1
 "PRCmE_ga"  [Unused]
     ! modules: ocean_model

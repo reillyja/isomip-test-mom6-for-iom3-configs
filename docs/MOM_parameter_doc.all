@@ -68,11 +68,11 @@ ENABLE_BUGS_BY_DEFAULT = True   !   [Boolean] default = True
                                 ! will no longer be used to set their default.  Setting this to false means that
                                 ! bugs are only used if they are actively selected, but it also means that
                                 ! answers may change when code is updated due to newly found bugs.
-DT = 720.0                      !   [s]
+DT = 300.0                      !   [s]
                                 ! The (baroclinic) dynamics time step.  The time-step that is actually used will
                                 ! be an integer fraction of the forcing time-step (DT_FORCING in ocean-only mode
                                 ! or the coupling timestep in coupled mode.)
-DT_THERM = 720.0                !   [s] default = 720.0
+DT_THERM = 300.0                !   [s] default = 300.0
                                 ! The thermodynamic time step. Ideally DT_THERM should be an integer multiple of
                                 ! DT and of DT_TRACER_ADVECT and less than the forcing or coupling time-step.
                                 ! However, if THERMO_SPANS_COUPLING is true, DT_THERM can be an integer multiple
@@ -82,7 +82,7 @@ THERMO_SPANS_COUPLING = False   !   [Boolean] default = False
                                 ! coupling timestep. The actual thermodynamic timestep that is used in this case
                                 ! is the largest integer multiple of the coupling timestep that is less than or
                                 ! equal to DT_THERM.
-DT_TRACER_ADVECT = 720.0        !   [s] default = 720.0
+DT_TRACER_ADVECT = 300.0        !   [s] default = 300.0
                                 ! The tracer advection time step. Ideally DT_TRACER_ADVECT should be an integer
                                 ! multiple of DT, less than DT_THERM, and less than the forcing or coupling
                                 ! time-step. However, if TRADV_SPANS_COUPLING is true, DT_TRACER_ADVECT can be
@@ -114,7 +114,7 @@ HFREEZE = -1.0                  !   [m] default = -1.0
 INTERPOLATE_P_SURF = False      !   [Boolean] default = False
                                 ! If true, linearly interpolate the surface pressure over the coupling time
                                 ! step, using the specified value at the end of the step.
-DTBT_RESET_PERIOD = 0.0         !   [s] default = 720.0
+DTBT_RESET_PERIOD = 0.0         !   [s] default = 300.0
                                 ! The period between recalculations of DTBT (if DTBT <= 0). If DTBT_RESET_PERIOD
                                 ! is negative, DTBT is set based only on information available at
                                 ! initialization.  If 0, DTBT will be set every dynamics time step. The default
@@ -687,7 +687,7 @@ KD_SALT_MOLECULAR = 8.02E-10    !   [m2 s-1] default = 8.02E-10
                                 ! The molecular diffusivity of salt in sea water at the freezing point.
 KD_TEMP_MOLECULAR = 1.41E-07    !   [m2 s-1] default = 1.41E-07
                                 ! The molecular diffusivity of heat in sea water at the freezing point.
-DT_FORCING = 720.0              !   [s] default = 0.0
+DT_FORCING = 300.0              !   [s] default = 0.0
                                 ! The time step for changing forcing, coupling with other components, or
                                 ! potentially writing certain diagnostics. The default value is given by DT.
 COL_THICK_MELT_THRESHOLD = 10.0 !   [m] default = 0.0
@@ -703,9 +703,9 @@ ICE_SHELF_VK_CNST = 0.4         !   [nondim] default = 0.4
                                 ! Von Karman constant.
 ICE_SHELF_RC = 0.2              !   [nondim] default = 0.2
                                 ! Critical flux Richardson number for ice melt
-ICE_SHELF_BUOYANCY_FLUX_ITT_BUGFIX = True !   [Boolean] default = True
+ICE_SHELF_BUOYANCY_FLUX_ITT_BUG = True !   [Boolean] default = True
                                 ! Bug fix of buoyancy iteration
-ICE_SHELF_SALT_FLUX_ITT_BUGFIX = True !   [Boolean] default = True
+ICE_SHELF_SALT_FLUX_ITT_BUG = True !   [Boolean] default = True
                                 ! Bug fix of salt iteration
 ICE_SHELF_BUOYANCY_FLUX_ITT_THRESHOLD = 1.0E-04 !   [nondim] default = 1.0E-04
                                 ! Convergence criterion of Newton's method for ice shelf buoyancy iteration.
@@ -1943,7 +1943,7 @@ PRESSURE_DEPENDENT_FRAZIL = False !   [Boolean] default = False
                                 ! If true, use a pressure dependent freezing temperature when making frazil. The
                                 ! default is false, which will be faster but is inappropriate with ice-shelf
                                 ! cavities.
-IGNORE_FLUXES_OVER_LAND = False !   [Boolean] default = False
+IGNORE_FLUXES_OVER_LAND = True  !   [Boolean] default = False
                                 ! If true, the model does not check if fluxes are being applied over land
                                 ! points. This is needed when the ocean is coupled with ice shelves and sea ice,
                                 ! since the sea ice mask needs to be different than the ocean mask to avoid sea
@@ -2112,7 +2112,8 @@ KHTR = 1.0                      !   [m2 s-1] default = 0.0
 KHTR_MIN = 0.0                  !   [m2 s-1] default = 0.0
                                 ! The minimum along-isopycnal tracer diffusivity.
 KHTR_MAX = 0.0                  !   [m2 s-1] default = 0.0
-                                ! The maximum along-isopycnal tracer diffusivity.
+                                ! The maximum along-isopycnal tracer diffusivity. Set to a positive value to
+                                ! activate.
 KHTR_PASSIVITY_COEFF = 0.0      !   [nondim] default = 0.0
                                 ! The coefficient that scales deformation radius over grid-spacing in passivity,
                                 ! where passivity is the ratio between along isopycnal mixing of tracers to
