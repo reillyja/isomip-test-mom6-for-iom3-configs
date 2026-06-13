@@ -3845,6 +3845,20 @@
     ! standard_name: water_flux_into_sea_water_from_rivers
     ! cell_methods: xh:mean yh:mean area:mean
     ! variants: {lrunoff,friver}
+"frunoff_glc"  [Unused]
+    ! modules: {ocean_model,ocean_model_d2}
+    ! dimensions: xh, yh
+    ! long_name: Frozen glacier runoff (calving) and iceberg melt into ocean
+    ! units: kg m-2 s-1
+    ! standard_name: glc_water_flux_into_sea_water_from_icebergs
+    ! cell_methods: xh:mean yh:mean area:mean
+"lrunoff_glc"  [Unused]
+    ! modules: {ocean_model,ocean_model_d2}
+    ! dimensions: xh, yh
+    ! long_name: Liquid runoff (glaciers) into ocean
+    ! units: kg m-2 s-1
+    ! standard_name: water_flux_into_sea_water_from_glaciers
+    ! cell_methods: xh:mean yh:mean area:mean
 "net_massout"  [Unused]
     ! modules: {ocean_model,ocean_model_d2}
     ! dimensions: xh, yh
@@ -3926,6 +3940,16 @@
     ! long_name: Area integrated liquid runoff into ocean
     ! units: kg s-1
     ! variants: {total_lrunoff,total_friver}
+"total_frunoff_glc"  [Unused]
+    ! modules: ocean_model
+    ! dimensions: scalar
+    ! long_name: Area integrated frozen glacier runoff (calving) & iceberg melt into ocean
+    ! units: kg s-1
+"total_lrunoff_glc"  [Unused]
+    ! modules: ocean_model
+    ! dimensions: scalar
+    ! long_name: Area integrated liquid glacier runoff into ocean
+    ! units: kg s-1
 "total_net_massout"  [Unused]
     ! modules: ocean_model
     ! dimensions: scalar
@@ -3934,7 +3958,7 @@
 "total_net_massin"  [Unused]
     ! modules: ocean_model
     ! dimensions: scalar
-    ! long_name: Area integrated mass entering ocean due to predip, runoff, ice melt
+    ! long_name: Area integrated mass entering ocean due to precip, runoff, ice melt
     ! units: kg s-1
 "PRCmE_ga"  [Unused]
     ! modules: ocean_model
@@ -3987,6 +4011,18 @@
     ! long_name: Heat content (relative to 0C) of liquid runoff into ocean
     ! units: W m-2
     ! standard_name: temperature_flux_due_to_runoff_expressed_as_heat_flux_into_sea_water
+    ! cell_methods: xh:mean yh:mean area:mean
+"heat_content_frunoff_glc"  [Unused]
+    ! modules: {ocean_model,ocean_model_d2}
+    ! dimensions: xh, yh
+    ! long_name: Heat content (relative to 0C) of solid glacier runoff into ocean
+    ! units: W m-2
+    ! cell_methods: xh:mean yh:mean area:mean
+"heat_content_lrunoff_glc"  [Unused]
+    ! modules: {ocean_model,ocean_model_d2}
+    ! dimensions: xh, yh
+    ! long_name: Heat content (relative to 0C) of liquid glacier runoff into ocean
+    ! units: W m-2
     ! cell_methods: xh:mean yh:mean area:mean
 "hfrunoffds"  [Unused]
     ! modules: {ocean_model,ocean_model_d2}
@@ -4126,6 +4162,12 @@
     ! units: W m-2
     ! cell_methods: xh:mean yh:mean area:mean
     ! variants: {latent_frunoff,hfibthermds}
+"latent_frunoff_glc"  [Unused]
+    ! modules: {ocean_model,ocean_model_d2}
+    ! dimensions: xh, yh
+    ! long_name: Latent heat flux into ocean due to melting of frozen glacier runoff
+    ! units: W m-2
+    ! cell_methods: xh:mean yh:mean area:mean
 "sensible"  [Used] (CMOR equivalent is "hfsso")
     ! modules: {ocean_model,ocean_model_d2}
     ! dimensions: xh, yh
@@ -4159,6 +4201,16 @@
     ! long_name: Area integrated heat content (relative to 0C) of liquid runoff
     ! units: W
     ! variants: {total_heat_content_lrunoff,total_hfrunoffds}
+"total_heat_content_frunoff_glc"  [Unused]
+    ! modules: ocean_model
+    ! dimensions: scalar
+    ! long_name: Area integrated heat content (relative to 0C) of solid glacier runoff
+    ! units: W
+"total_heat_content_lrunoff_glc"  [Unused]
+    ! modules: ocean_model
+    ! dimensions: scalar
+    ! long_name: Area integrated heat content (relative to 0C) of liquid glacier runoff
+    ! units: W
 "total_heat_content_lprec"  [Unused]
     ! modules: ocean_model
     ! dimensions: scalar
@@ -4252,6 +4304,11 @@
     ! long_name: Area integrated latent heat flux due to melting icebergs
     ! units: W
     ! variants: {total_lat_frunoff,total_hfibthermds}
+"total_lat_frunoff_glc"  [Unused]
+    ! modules: ocean_model
+    ! dimensions: scalar
+    ! long_name: Area integrated latent heat flux due to melting frozen glacier runoff
+    ! units: W
 "total_sens"  [Unused]
     ! modules: ocean_model
     ! dimensions: scalar

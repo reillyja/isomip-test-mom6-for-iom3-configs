@@ -27,30 +27,30 @@ DRIVER_attributes::
 ::
 
 PELAYOUT_attributes::
-     atm_ntasks = 2
+     atm_ntasks = 0
      atm_nthreads = 1
      atm_pestride = 1
      atm_rootpe = 0
-     cpl_ntasks = 2
+     cpl_ntasks = 1
      cpl_nthreads = 1
      cpl_pestride = 1
-     cpl_rootpe = 2
+     cpl_rootpe = 0
      esmf_logging = ESMF_LOGKIND_NONE
      ninst = 1
-     ocn_ntasks = 1
+     ocn_ntasks = 48
      ocn_nthreads = 1
      ocn_pestride = 1
-     ocn_rootpe = 4
+     ocn_rootpe = 1
      pio_asyncio_ntasks = 0
      pio_asyncio_rootpe = 1
      pio_asyncio_stride = 0
-     rof_ntasks = 2
+     rof_ntasks = 0
      rof_nthreads = 1
      rof_pestride = 1
-     rof_rootpe = 2
+     rof_rootpe = 0
 ::
 
-component_list: MED ATM OCN ROF
+component_list: MED OCN
 ALLCOMP_attributes::
      ATM_model = datm
      GLC_model = sglc
@@ -94,7 +94,7 @@ ALLCOMP_attributes::
      hostname = gadi
      ice_ncat = 5
      mediator_present = true
-     mesh_atm = ./INPUT/access-om3-25km-ESMFmesh.nc
+     mesh_atm = UNSET
      mesh_ice = UNSET
      mesh_lnd = UNSET
      mesh_mask = ./INPUT/access-om3-25km-ESMFmesh.nc
@@ -115,6 +115,7 @@ ALLCOMP_attributes::
      tfreeze_option = linear_salt
      wav_coupling_to_cice = .false.
      additional_restart_dir = RESTART
+     apply_startup_lag = false
      restart_pointer_append_date = .false.
 ::
 
@@ -125,8 +126,8 @@ MED_attributes::
      atm2lnd_map = unset
      atm2ocn_map = unset
      atm2wav_map = unset
-     atm_nx = 240
-     atm_ny = 40
+     atm_nx = 0
+     atm_ny = 0
      budget_ann = 1
      budget_daily = 0
      budget_inst = 0
@@ -206,8 +207,8 @@ MED_attributes::
      rof2ocn_fmapname = unset
      rof2ocn_ice_rmapname = unset
      rof2ocn_liq_rmapname = unset
-     rof_nx = 240
-     rof_ny = 40
+     rof_nx = 0
+     rof_ny = 0
      wav2ocn_smapname = unset
      wav_nx = 0
      wav_ny = 0
@@ -222,9 +223,9 @@ CLOCK_attributes::
      history_ymd = -999
      ice_cpl_dt = 99999 #not used
      lnd_cpl_dt = 99999 #not used
-     ocn_cpl_dt = 300 #ignored (coupling timestep set by nuopc.runseq) unless stop_option is nsteps
-     restart_n = 1
-     restart_option = nyears
+     ocn_cpl_dt = 300
+     restart_n = 3
+     restart_option = nmonths
      restart_ymd = -999
      rof_cpl_dt = 99999 #not used
      start_tod = 0
@@ -253,6 +254,7 @@ ICE_attributes::
 
 OCN_attributes::
      Verbosity = off
+     zero_missing_imports = true
 ::
 
 ROF_attributes::

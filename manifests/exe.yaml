@@ -1,8 +1,8 @@
 format: yamanifest
 version: 1.0
 ---
-work/MOM6:
-  fullpath: /scratch/x77/cy8964/mom6/setup-mom6-nci-executable/only_mom6_symmetric/MOM6
+work/access-om3-MOM6:
+  fullpath: /g/data/au88/jr5971/access3-share-isomip/install-mom6-isomip/bin/access-om3-MOM6
   hashes:
-    binhash: 58ea390293390e59780f2a4deac50aee
-    md5: 08f1f4196510d1a1a7cf79b1bcd9ca77
+    binhash: b43f877a05099ba529bbd34ebfeb90fb
+    md5: 69d45364a056d436b4fc1fc44109388a

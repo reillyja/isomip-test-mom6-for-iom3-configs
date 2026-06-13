@@ -1,3 +1,48 @@
 format: yamanifest
 version: 1.0
---- {}
+---
+work/Shelf.res.nc:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/Shelf.res.nc
+  hashes:
+    binhash: 1ad72aa6c5be9b370db08978f259271f
+    md5: b9220aa3ab6234ede25a82085d35b1fe
+work/nuopc_isomip.cpl.r.1900-02-15-00000.nc:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/nuopc_isomip.cpl.r.1900-02-15-00000.nc
+  hashes:
+    binhash: c6bea8e46dde6bad3ab5568c8acc6906
+    md5: a4fe84a78d8b4d2abd64e5e3a7adf767
+work/nuopc_isomip.mom6.r.1900-02-15-00000.nc:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/nuopc_isomip.mom6.r.1900-02-15-00000.nc
+  hashes:
+    binhash: c37092addd77ad972ef7e99b195d15ec
+    md5: 875eb97a3312d06564a5c3fbd451dc12
+work/payu_stub.atm.r:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/payu_stub.atm.r
+  hashes:
+    binhash: f44bce65ec894870fa1b807a67e9f2fe
+    md5: 37af530fd1385a5a689b7468c280457f
+work/payu_stub.rof.r:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/payu_stub.rof.r
+  hashes:
+    binhash: e09040fee114e7ebc62afab0e5e0650e
+    md5: 37af530fd1385a5a689b7468c280457f
+work/rpointer.atm:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/rpointer.atm
+  hashes:
+    binhash: 89e839295c364e4b8238f71b6ad355be
+    md5: 9bbf1fb5fbc7050f06a9d5efb41d2ad4
+work/rpointer.cpl:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/rpointer.cpl
+  hashes:
+    binhash: 0cf9e74e311c1e3c6e23fa80aabf1a17
+    md5: dc01fa7cfad262b00924f664b562b177
+work/rpointer.ocn:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/rpointer.ocn
+  hashes:
+    binhash: 9a24fe2240b7de56894c93acabde04d0
+    md5: 0590b91cf89ca8b6245d3cdeb8f531cc
+work/rpointer.rof:
+  fullpath: /scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split/archive/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/restart000/rpointer.rof
+  hashes:
+    binhash: 1f7136271f31f5166cfdd8bcb00aba0a
+    md5: 6f507eb641fa3c8f1533e96e41ba30c4

@@ -1,8 +1,93 @@
 format: yamanifest
 version: 1.0
 ---
-work/INPUT/Ocean0_3D_Claire.nc:
-  fullpath: /g/data/x77/cy8964/idealised-mom6-control/Ocean0_NK36_for_iom3/INPUT/Ocean0_3D_Claire.nc
+work/INPUT/JRA55do-datm-ESMFmesh.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/JRA55do-datm-ESMFmesh.nc
   hashes:
-    binhash: 64c56a0a08732fa246eed19e6c20795a
+    binhash: 54e38a1f43996e462aa7d9a10197d592
+    md5: 3d8315688a0ff90c546eb539e2cec620
+work/INPUT/JRA55do-datm-cavitymasked-ESMFmesh.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/JRA55do-datm-cavitymasked-ESMFmesh.nc
+  hashes:
+    binhash: 045fd7d6ffa6ed3b262c33c33459a1f9
+    md5: b4b359998d2db39250b601c1480b50a6
+work/INPUT/JRA55do-drof-ESMFmesh.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/JRA55do-drof-ESMFmesh.nc
+  hashes:
+    binhash: 944523d4c8f272c5ae85bdee64b622ec
+    md5: 3d8315688a0ff90c546eb539e2cec620
+work/INPUT/JRA55do-drof-cavitymasked-ESMFmesh.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/JRA55do-drof-cavitymasked-ESMFmesh.nc
+  hashes:
+    binhash: ffe58ad429105c040157cae7cb7834b3
+    md5: b4b359998d2db39250b601c1480b50a6
+work/INPUT/Ocean0_3D_Claire.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/Ocean0_3D_Claire.nc
+  hashes:
+    binhash: ccd5ae861cc6b9ea36747c89be725eb4
     md5: a9e43676e2c0acbfe1d48ce856d2ff84
+work/INPUT/RYF.friver.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.friver.1990_1991.nc
+  hashes:
+    binhash: 7a57303be69e1f3f89975225e8caf317
+    md5: 3551a3ac3a0d3f30c758cda335321d64
+work/INPUT/RYF.huss.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.huss.1990_1991.nc
+  hashes:
+    binhash: 979d54c3444ad11f70fd7c316388eaa7
+    md5: 51369fad24fff10bf6d59b85e120f582
+work/INPUT/RYF.licalvf.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.licalvf.1990_1991.nc
+  hashes:
+    binhash: cd77d4ae88ee1821587bf38522b223e1
+    md5: 967269444a2d0229a7dfa548f2864a42
+work/INPUT/RYF.prra.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.prra.1990_1991.nc
+  hashes:
+    binhash: a26eb18dd80a97fb72f420090c4f2764
+    md5: 96be4c0a7019b10ca853d9e41a949897
+work/INPUT/RYF.prsn.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.prsn.1990_1991.nc
+  hashes:
+    binhash: 8479a4cbfb5402fc7195414d18152181
+    md5: 3555888b309c8a881d120da6bb993cc3
+work/INPUT/RYF.psl.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.psl.1990_1991.nc
+  hashes:
+    binhash: 043ef9f6aad597f422062c1d126e0b13
+    md5: 505646252c36a6a5a0dd9f76708d369a
+work/INPUT/RYF.rlds.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.rlds.1990_1991.nc
+  hashes:
+    binhash: 3b5e1b8059ce11a1e43dc784625bb7fb
+    md5: 58f38035b2c691146530d5ce02d2da32
+work/INPUT/RYF.rsds.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.rsds.1990_1991.nc
+  hashes:
+    binhash: f15a4ce834c31eb5d00e4681fc6ffcbb
+    md5: 55b81833f7dc4f4097f06e430e80800d
+work/INPUT/RYF.tas.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.tas.1990_1991.nc
+  hashes:
+    binhash: 3f374ab6c77c805e7b817ca5046efcc7
+    md5: cd4b734f97ee78b6ce23251fa8adc124
+work/INPUT/RYF.uas.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.uas.1990_1991.nc
+  hashes:
+    binhash: 9194c328d1eb80b4afa54c1d0311b8a0
+    md5: 3a27268ef5aa409a1e77297224b5f512
+work/INPUT/RYF.vas.1990_1991.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/RYF.vas.1990_1991.nc
+  hashes:
+    binhash: eff6cc9ef5b0ba6225fc5c74b1a4018d
+    md5: 0eb7979404bc457ff755702f109193bb
+work/INPUT/access-om3-25km-ESMFmesh.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/access-om3-25km-ESMFmesh.nc
+  hashes:
+    binhash: 1b46a7a5a409d9c6958c9c71166a4ec3
+    md5: 3d8315688a0ff90c546eb539e2cec620
+work/INPUT/isomip_grid_for_mesh.nc:
+  fullpath: /g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs-nuopc-ocean-only/INPUT/isomip_grid_for_mesh.nc
+  hashes:
+    binhash: 5e80cbbe10b91d1d2ae13fcb84644d36
+    md5: 459788b72971dd1e3dd543a2450bd85b
