@@ -191,6 +191,7 @@
 "ice_shelf_model","area_shelf_h","area_shelf_h","ice","all",.false.,"none",2
 "ice_shelf_model","shelf_mass","shelf_mass","ice","all",.false.,"none",2
 "ice_shelf_model","h_shelf","h_shelf","ice","all",.false.,"none",2
+"ice_shelf_model","dynamic_cavity_category","dynamic_cavity_category","ice","all",.false.,"none",2
 "ice_shelf_model","mass_flux","mass_flux","ice","all",.false.,"none",2
 "ice_shelf_model","melt","melt_rate","ice","all",.false.,"none",2
 "ice_shelf_model","thermal_driving","thermal_driving","ice","all",.false.,"none",2

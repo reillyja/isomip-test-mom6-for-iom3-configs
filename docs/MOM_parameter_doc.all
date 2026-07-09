@@ -715,7 +715,7 @@ UTIDE = 0.01                    !   [m s-1] default = 0.0
 ! === module MOM_EOS ===
 DENSITY_ICE = 900.0             !   [kg m-3] default = 900.0
                                 ! A typical density of ice.
-MIN_THICKNESS_SIMPLE_CALVE = 0.0 !   [m] default = 0.0
+MIN_THICKNESS_SIMPLE_CALVE = 10.0 !   [m] default = 0.0
                                 ! Min thickness rule for the very simple calving law
 USTAR_SHELF_BG = 0.001          !   [m s-1] default = 0.0
                                 ! The minimum value of ustar under ice shelves.
@@ -727,17 +727,6 @@ USTAR_SHELF_FROM_VEL = True     !   [Boolean] default = True
                                 ! shelves instead of using the previous values of the stresses.
 
 ! === module MOM_restart ===
-ICE_PROFILE_CONFIG = "FILE"     !
-                                ! This specifies how the initial ice profile is specified. Valid values are:
-                                ! CHANNEL, FILE, and USER.
-ICE_THICKNESS_FILE = "Ocean0_3D_Claire.nc" ! default = "ice_shelf_h.nc"
-                                ! The file from which the bathymetry is read.
-LEN_SIDE_STRESS = 0.0           !   [axis_units] default = 0.0
-                                ! position past which shelf sides are stress free.
-ICE_THICKNESS_VARNAME = "thick" ! default = "h_shelf"
-                                ! The name of the thickness variable in ICE_THICKNESS_FILE.
-ICE_AREA_VARNAME = "area"       ! default = "area_shelf_h"
-                                ! The name of the area variable in ICE_THICKNESS_FILE.
 SHELF_IC_OUTPUT_FILE = "MOM_Shelf_IC" ! default = "MOM_Shelf_IC"
                                 ! The name-root of the output file for the ice shelf initial conditions.
 
@@ -746,105 +735,6 @@ FATAL_INCONSISTENT_RESTART_TIME = False !   [Boolean] default = False
                                 ! If true and a time_in value is provided to MOM_initialize_state, verify that
                                 ! the time read from a restart file is the same as time_in, and issue a fatal
                                 ! error if it is not.  Otherwise, simply set the time to time_in if present.
-INIT_LAYERS_FROM_Z_FILE = False !   [Boolean] default = False
-                                ! If true, initialize the layer thicknesses, temperatures, and salinities from a
-                                ! Z-space file on a latitude-longitude grid.
-THICKNESS_CONFIG = "ISOMIP"     ! default = "uniform"
-                                ! A string that determines how the initial layer thicknesses are specified for a
-                                ! new run:
-                                !     file - read interface heights from the file specified
-                                !       by (THICKNESS_FILE).
-                                !     thickness_file - read thicknesses from the file specified
-                                !       by (THICKNESS_FILE).
-                                !     mass_file - read thicknesses in units of mass per unit area from the file
-                                !       specified by (THICKNESS_FILE).
-                                !     coord - determined by ALE coordinate.
-                                !     uniform - uniform thickness layers evenly distributed
-                                !       between the surface and MAXIMUM_DEPTH.
-                                !     list - read a list of positive interface depths.
-                                !     param - use thicknesses from parameter THICKNESS_INIT_VALUES.
-                                !     DOME - use a slope and channel configuration for the
-                                !       DOME sill-overflow test case.
-                                !     ISOMIP - use a configuration for the
-                                !       ISOMIP test case.
-                                !     benchmark - use the benchmark test case thicknesses.
-                                !     Neverworld - use the Neverworld test case thicknesses.
-                                !     search - search a density profile for the interface
-                                !       densities. This is not yet implemented.
-                                !     circle_obcs - the circle_obcs test case is used.
-                                !     DOME2D - 2D version of DOME initialization.
-                                !     adjustment2d - 2D lock exchange thickness ICs.
-                                !     sloshing - sloshing gravity thickness ICs.
-                                !     seamount - no motion test with seamount ICs.
-                                !     dumbbell - sloshing channel ICs.
-                                !     soliton - Equatorial Rossby soliton.
-                                !     rossby_front - a mixed layer front in thermal wind balance.
-                                !     USER - call a user modified routine.
-TS_CONFIG = "ISOMIP"            !
-                                ! A string that determines how the initial temperatures and salinities are
-                                ! specified for a new run:
-                                !     file - read velocities from the file specified
-                                !       by (TS_FILE).
-                                !     fit - find the temperatures that are consistent with
-                                !       the layer densities and salinity S_REF.
-                                !     TS_profile - use temperature and salinity profiles
-                                !       (read from TS_FILE) to set layer densities.
-                                !     benchmark - use the benchmark test case T & S.
-                                !     linear - linear in logical layer space.
-                                !     DOME2D - 2D DOME initialization.
-                                !     ISOMIP - ISOMIP initialization.
-                                !     adjustment2d - 2d lock exchange T/S ICs.
-                                !     sloshing - sloshing mode T/S ICs.
-                                !     seamount - no motion test with seamount ICs.
-                                !     dumbbell - sloshing channel ICs.
-                                !     rossby_front - a mixed layer front in thermal wind balance.
-                                !     SCM_CVMix_tests - used in the SCM CVMix tests.
-                                !     USER - call a user modified routine.
-ISOMIP_T_SUR = -1.9             !   [degC] default = -1.9
-                                ! Temperature at the surface (interface)
-ISOMIP_S_SUR = 33.8             !   [ppt] default = 33.8
-                                ! Salinity at the surface (interface)
-ISOMIP_T_BOT = 1.0              !   [degC] default = -1.9
-                                ! Temperature at the bottom (interface)
-ISOMIP_S_BOT = 34.7             !   [ppt] default = 34.55
-                                ! Salinity at the bottom (interface)
-DEPRESS_INITIAL_SURFACE = False !   [Boolean] default = False
-                                ! If true,  depress the initial surface to avoid huge tsunamis when a large
-                                ! surface pressure is applied.
-TRIM_IC_FOR_P_SURF = True       !   [Boolean] default = False
-                                ! If true, cuts way the top of the column for initial conditions at the depth
-                                ! where the hydrostatic pressure matches the imposed surface pressure which is
-                                ! read from file.
-SURFACE_PRESSURE_FILE = "Ocean0_3D_Claire.nc" !
-                                ! The initial condition file for the surface pressure exerted by ice.
-SURFACE_PRESSURE_VAR = "thick"  ! default = ""
-                                ! The initial condition variable for the surface pressure exerted by ice.
-SURFACE_PRESSURE_SCALE = 8820.0 !   [file dependent] default = 1.0
-                                ! A scaling factor to convert SURFACE_PRESSURE_VAR from file
-                                ! SURFACE_PRESSURE_FILE into a surface pressure.
-TRIM_IC_Z_TOLERANCE = 1.0E-10   !   [m] default = 1.0E-05
-                                ! The tolerance with which to find the depth matching the specified surface
-                                ! pressure with TRIM_IC_FOR_P_SURF.
-FRAC_DP_AT_POS_NEGATIVE_P_BUGFIX = False !   [Boolean] default = False
-                                ! If true, use bugfix in ice shelf TRIM_IC initialization. Otherwise, pressure
-                                ! input to density EOS is negative.
-TRIMMING_USES_REMAPPING = True  !   [Boolean] default = False
-                                ! When trimming the column, also remap T and S.
-REGRID_ACCELERATE_INIT = False  !   [Boolean] default = False
-                                ! If true, runs REGRID_ACCELERATE_ITERATIONS iterations of the regridding
-                                ! algorithm to push the initial grid to be consistent with the initial
-                                ! condition. Useful only for state-based and iterative coordinates.
-VELOCITY_CONFIG = "zero"        ! default = "zero"
-                                ! A string that determines how the initial velocities are specified for a new
-                                ! run:
-                                !     file - read velocities from the file specified
-                                !       by (VELOCITY_FILE).
-                                !     zero - the fluid is initially at rest.
-                                !     uniform - the flow is uniform (determined by
-                                !       parameters INITIAL_U_CONST and INITIAL_V_CONST).
-                                !     rossby_front - a mixed layer front in thermal wind balance.
-                                !     soliton - Equatorial Rossby soliton.
-                                !     USER - call a user modified routine.
 ODA_INCUPD = False              !   [Boolean] default = False
                                 ! If true, oda incremental updates will be applied everywhere in the domain.
 SPONGE = True                   !   [Boolean] default = False
@@ -2231,7 +2121,7 @@ USE_WAVES = False               !   [Boolean] default = False
                                 ! If true, enables surface wave modules.
 
 ! === module MOM_main (MOM_driver) ===
-DAYMAX = 90.0                   !   [days]
+DAYMAX = 1.0069444444444444     !   [days]
                                 ! The final time of the whole simulation, in units of TIMEUNIT seconds.  This
                                 ! also sets the potential end time of the present run segment if the end time is
                                 ! not set via ocean_solo_nml in input.nml.

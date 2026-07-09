@@ -4,9 +4,9 @@ laboratory: mom6-isomip
 
 modules:
   use:
-    - /g/data/vk83/prerelease/modules
+    - /g/data/vk83/modules
   load:
-    - access-om3/pr218-3
+    - payu/1.3.2
 
 queue: normalsr
 walltime: 01:00:00
@@ -15,7 +15,7 @@ ncpus: 48
 jobfs: 10GB
 
 model: mom6
-exe: mom6-solo
+exe: /g/data/au88/jr5971/MOM6-isomip-nuopc/install-solo-gfz-geometry/bin/mom6-solo
 input:
   - ./INPUT
 

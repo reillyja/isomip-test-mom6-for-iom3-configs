@@ -5,10 +5,10 @@
     stack_size = 0  /
 
  &ocean_solo_nml
-        months = 3,
+        months = 0,
         days   = 0,
         hours  = 0,
-        minutes = 0,
+        minutes = 10,
         seconds = 0,
         date_init = 1,1,1,0,0,0,
         calendar = 'NOLEAP' /
@@ -18,7 +18,6 @@
     input_filename = 'n',
     restart_input_dir = 'INPUT/',
     restart_output_dir = 'RESTART/',
-    parameter_filename = 'MOM_input', 'MOM_override' /
-
+    parameter_filename = 'MOM_input', 'MOM_override.gfz_active' /
  &diag_manager_nml
     flush_nc_files = .true. /
