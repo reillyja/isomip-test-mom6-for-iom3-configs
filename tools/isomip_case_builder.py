@@ -73,6 +73,7 @@ class GeometryTransform:
     bed_slope_m_per_km: float = 0.0
     min_cavity_depth_m: float = 1.0
     clear_thin_cavity: bool = True
+    clip_to_initial_shelf_extent: bool = True
 
 
 @dataclass(frozen=True)
@@ -102,6 +103,7 @@ class CaseConfig:
     name: str = "ocean3-generated-smoke"
     ocean_case: str = "Ocean3"
     geometry_mode: str = "geometry-noop"  # "static", "geometry-noop", "geometry"
+    wettable_envelope: bool = False
     grid: GridConfig = field(default_factory=GridConfig)
     transform: GeometryTransform = field(default_factory=GeometryTransform)
     runtime: RuntimeConfig = field(default_factory=RuntimeConfig)
@@ -120,7 +122,8 @@ class GeneratedPaths:
     initial: Path
     geometry: Path
     geometry_noop: Path | None
-    topography: Path
+    topography_preview: Path
+    topography: Path | None
     summary_json: Path
 
 
@@ -289,6 +292,18 @@ def build_geometry(config: CaseConfig) -> GeometryData:
     cavity = base - bed
     if tr.clear_thin_cavity:
         active = active & (cavity >= tr.min_cavity_depth_m)
+    if config.wettable_envelope and tr.clip_to_initial_shelf_extent:
+        warnings.append("wettable_envelope=True disables clip_to_initial_shelf_extent so future shelf expansion is retained.")
+    if tr.clip_to_initial_shelf_extent and not config.wettable_envelope:
+        initial_extent = active[0].copy()
+        future_expansion = active & ~initial_extent[None, :, :]
+        clipped_cells = int(np.count_nonzero(np.any(future_expansion, axis=0)))
+        if clipped_cells:
+            warnings.append(
+                f"Clipped {clipped_cells} cells that become floating outside the initial shelf extent; "
+                "set clip_to_initial_shelf_extent=False only for dynamic wettable-envelope tests."
+            )
+        active = active & initial_extent[None, :, :]
     thick = np.where(active, thick, 0.0)
     base = np.where(active, base, 0.0)
     floating_fraction = np.where(active, np.clip(floating_fraction, 0.0, 1.0), 0.0)
@@ -348,6 +363,53 @@ def geometry_summary(data: GeometryData, time_index: int = 0) -> dict[str, float
     }
 
 
+def active_shelf_mask(data: GeometryData, min_cavity_depth_m: float = 1.0) -> np.ndarray:
+    """Return prescribed cells that are valid floating shelf at each time."""
+
+    cavity = data.base - data.bed
+    return (data.floating_fraction > 1.0e-10) & (data.thick > 1.0e-6) & (cavity >= min_cavity_depth_m)
+
+
+def wettable_envelope_mask(data: GeometryData, min_cavity_depth_m: float = 1.0) -> np.ndarray:
+    """Return cells that can hold prescribed floating shelf at any time."""
+
+    return np.any(active_shelf_mask(data, min_cavity_depth_m=min_cavity_depth_m), axis=0)
+
+
+def wettable_topography(data: GeometryData, min_cavity_depth_m: float = 1.0) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Build a static positive-downward depth field for a pre-wet shelf envelope."""
+
+    active = active_shelf_mask(data, min_cavity_depth_m=min_cavity_depth_m)
+    envelope = np.any(active, axis=0)
+    open_ocean = np.any(data.open_ocean_fraction > 1.0e-10, axis=0)
+    wet = envelope | open_ocean
+    bed_depth = np.nanmax(np.maximum(-data.bed, 0.0), axis=0)
+    required_cavity_depth = np.max(np.where(active, -data.base + min_cavity_depth_m, 0.0), axis=0)
+    depth = np.where(wet, np.maximum.reduce([bed_depth, required_cavity_depth, np.full_like(bed_depth, min_cavity_depth_m)]), 0.5 * min_cavity_depth_m)
+    return depth, wet, envelope
+
+
+def wettable_envelope_summary(data: GeometryData, min_cavity_depth_m: float = 1.0) -> dict[str, float | int]:
+    active = active_shelf_mask(data, min_cavity_depth_m=min_cavity_depth_m)
+    envelope = np.any(active, axis=0)
+    initial = active[0]
+    depth, wet, _ = wettable_topography(data, min_cavity_depth_m=min_cavity_depth_m)
+    cavity = data.base - data.bed
+    active_cavity = np.where(active, cavity, np.nan)
+    return {
+        "initial_shelf_cells": int(initial.sum()),
+        "envelope_cells": int(envelope.sum()),
+        "future_expansion_cells": int((envelope & ~initial).sum()),
+        "wet_cells": int(wet.sum()),
+        "newly_wet_envelope_cells": int((envelope & ~np.any(data.open_ocean_fraction > 1.0e-10, axis=0)).sum()),
+        "min_wet_depth_m": float(np.nanmin(depth[wet])) if np.any(wet) else float("nan"),
+        "max_wet_depth_m": float(np.nanmax(depth[wet])) if np.any(wet) else float("nan"),
+        "min_prescribed_cavity_m": float(np.nanmin(active_cavity)) if np.any(active) else float("nan"),
+        "active_cells_outside_envelope": int((active & ~envelope[None, :, :]).sum()),
+        "negative_wet_depth_cells": int((wet & (depth < 0.0)).sum()),
+    }
+
+
 def _write_axis(var, units: str, axis: str, long_name: str, values: np.ndarray) -> None:
     var.units = units
     var.axis = axis
@@ -385,7 +447,7 @@ def write_initial_file(path: Path, data: GeometryData) -> None:
     os.utime(path, (DETERMINISTIC_MTIME, DETERMINISTIC_MTIME))
 
 
-def write_geometry_file(path: Path, data: GeometryData, noop: bool = False) -> None:
+def write_geometry_file(path: Path, data: GeometryData, noop: bool = False, min_cavity_depth_m: float = 1.0) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if noop:
         thick = np.broadcast_to(data.thick[0], data.thick.shape).copy()
@@ -404,6 +466,10 @@ def write_geometry_file(path: Path, data: GeometryData, noop: bool = False) -> N
         _write_axis(ds.createVariable("Time", "f8", ("Time",)), "seconds since 0001-01-01 00:00:00", "T", "time", data.time)
         _write_axis(ds.createVariable("y", "f8", ("y",)), "m", "Y", "MOM6 y coordinate", data.y)
         _write_axis(ds.createVariable("x", "f8", ("x",)), "m", "X", "MOM6 x coordinate", data.x)
+        envelope = np.broadcast_to(
+            wettable_envelope_mask(data, min_cavity_depth_m=min_cavity_depth_m).astype(np.float64),
+            data.thick.shape,
+        )
         for name, units, long_name, values in (
             ("thick", "m", "floating ice physical thickness", thick),
             ("base_elevation", "m", "floating ice base elevation", base),
@@ -411,6 +477,7 @@ def write_geometry_file(path: Path, data: GeometryData, noop: bool = False) -> N
             ("bed_elevation", "m", "bed elevation", data.bed),
             ("grounded_fraction", "1", "grounded ice fraction", data.grounded_fraction),
             ("open_ocean_fraction", "1", "open ocean fraction", data.open_ocean_fraction),
+            ("wettable_envelope", "1", "cells that can hold prescribed floating shelf at any time", envelope),
             ("shelf_mass", "kg m-2", "diagnostic ice mass per shelf area", shelf_mass),
         ):
             var = ds.createVariable(name, "f8", ("Time", "y", "x"), fill_value=np.nan)
@@ -443,6 +510,33 @@ def write_topography_file(path: Path, data: GeometryData) -> None:
         bed[:, :, :] = data.bed
         depth[:, :, :] = np.maximum(-data.bed, 0.0)
         ds.description = "Generated bed/topography preview. MOM v1 controls use ISOMIP analytic topography parameters."
+    os.utime(path, (DETERMINISTIC_MTIME, DETERMINISTIC_MTIME))
+
+
+def write_mom_topography_file(path: Path, data: GeometryData, min_cavity_depth_m: float = 1.0) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    depth, wet, envelope = wettable_topography(data, min_cavity_depth_m=min_cavity_depth_m)
+    with netCDF4.Dataset(path, "w", format="NETCDF3_64BIT_OFFSET") as ds:
+        ds.createDimension("y", len(data.y))
+        ds.createDimension("x", len(data.x))
+        _write_axis(ds.createVariable("y", "f8", ("y",)), "m", "Y", "MOM6 y coordinate", data.y)
+        _write_axis(ds.createVariable("x", "f8", ("x",)), "m", "X", "MOM6 x coordinate", data.x)
+        depth_var = ds.createVariable("depth", "f8", ("y", "x"), fill_value=np.nan)
+        wet_var = ds.createVariable("wettable_envelope", "f8", ("y", "x"), fill_value=np.nan)
+        wet_mask_var = ds.createVariable("generated_wet_mask", "f8", ("y", "x"), fill_value=np.nan)
+        depth_var.units = "m"
+        depth_var.long_name = "positive-downward static MOM depth with pre-wet shelf envelope"
+        depth_var.coordinates = "y x"
+        wet_var.units = "1"
+        wet_var.long_name = "cells that can hold prescribed floating shelf at any time"
+        wet_mask_var.units = "1"
+        wet_mask_var.long_name = "generated static wet mask"
+        depth_var[:, :] = depth
+        wet_var[:, :] = envelope.astype(np.float64)
+        wet_mask_var[:, :] = wet.astype(np.float64)
+        ds.description = "Generated MOM6 file topography for wettable-envelope prescribed ice-shelf geometry"
+        ds.source_file = str(data.source)
+        ds.dynamic_cavity_min_depth_m = float(min_cavity_depth_m)
     os.utime(path, (DETERMINISTIC_MTIME, DETERMINISTIC_MTIME))
 
 
@@ -480,11 +574,20 @@ def _set_or_append_param(lines: list[str], key: str, value: str) -> None:
     lines.append(f"#override {key} = {value}")
 
 
-def _generated_override(config: CaseConfig, data: GeometryData, initial_rel: str, geometry_rel: str | None) -> str:
+def _generated_override(
+    config: CaseConfig,
+    data: GeometryData,
+    initial_rel: str,
+    geometry_rel: str | None,
+    topography_rel: str | None,
+) -> str:
     base_lines = (config.base_control / "MOM_override").read_text(encoding="utf-8").splitlines()
     grid = config.grid
     rt = config.runtime
     tr = config.transform
+    topography_depth = None
+    if config.wettable_envelope:
+        topography_depth, _, _ = wettable_topography(data, min_cavity_depth_m=tr.min_cavity_depth_m)
     params = {
         "ICE_THICKNESS_FILE": f'"{initial_rel}"',
         "SURFACE_PRESSURE_FILE": f'"{initial_rel}"',
@@ -505,7 +608,7 @@ def _generated_override(config: CaseConfig, data: GeometryData, initial_rel: str
         "DT_THERM": str(rt.dt_s),
         "DT_FORCING": str(rt.dt_s),
         "REGRIDDING_COORDINATE_MODE": f'"{rt.regridding_mode}"',
-        "MAXIMUM_DEPTH": f"{max(10.0, float(np.nanmax(-data.bed))):.12g}",
+        "MAXIMUM_DEPTH": f"{max(10.0, float(np.nanmax(topography_depth if topography_depth is not None else -data.bed))):.12g}",
         "MINIMUM_DEPTH": f"{tr.min_cavity_depth_m:.12g}",
         "ISOMIP_DOMAIN_WIDTH": f"{grid.ny * grid.dy_m:.12g}",
         "ISOMIP_TROUGH_WIDTH": f"{0.3 * grid.ny * grid.dy_m:.12g}",
@@ -520,13 +623,24 @@ def _generated_override(config: CaseConfig, data: GeometryData, initial_rel: str
         "ISOMIP_S_SUR_SPONGE": f"{rt.salinity_top:.12g}",
         "ISOMIP_S_BOT_SPONGE": f"{rt.salinity_bottom:.12g}",
     }
+    if config.wettable_envelope:
+        require(topography_rel is not None, "wettable_envelope=True requires a generated MOM topography file")
+        params.update(
+            {
+                "TOPO_CONFIG": '"file"',
+                "TOPO_FILE": f'"{topography_rel}"',
+                "TOPO_VARNAME": '"depth"',
+            }
+        )
     for key, value in params.items():
         _set_or_append_param(base_lines, key, value)
 
     block = [
         "",
         f"! Generated by tools/isomip_case_builder.py for {config.name}.",
-        "! The horizontal mask is fixed for v1 generated cases.",
+        "! Wettable-envelope cases pre-wet the static MOM mask using generated file topography."
+        if config.wettable_envelope
+        else "! The horizontal mask is fixed for v1 generated cases.",
     ]
     if geometry_rel is not None:
         block.extend(
@@ -542,7 +656,9 @@ def _generated_override(config: CaseConfig, data: GeometryData, initial_rel: str
                 "#override SHELF_GEOMETRY_BED_VAR = \"bed_elevation\"",
                 "#override SHELF_GEOMETRY_READ_GROUNDED = False",
                 "#override SHELF_GEOMETRY_GROUNDED_FRACTION_VAR = \"grounded_fraction\"",
-                "#override DYNAMIC_CAVITY_GEOMETRY = False",
+                f"#override SHELF_GEOMETRY_READ_ENVELOPE = {'True' if config.wettable_envelope else 'False'}",
+                "#override SHELF_GEOMETRY_ENVELOPE_VAR = \"wettable_envelope\"",
+                f"#override DYNAMIC_CAVITY_GEOMETRY = {'True' if config.wettable_envelope else 'False'}",
                 "#override DYNAMIC_CAVITY_ALLOW_DRYING = False",
                 f"#override DYNAMIC_CAVITY_MIN_DEPTH_M = {tr.min_cavity_depth_m:.12g}",
                 "#override ICE_SHELF_USTAR_FROM_VEL_BUGFIX = True",
@@ -593,6 +709,8 @@ def _copy_base_control(config: CaseConfig, control: Path, lab: Path) -> None:
 def build_generated_case(config: CaseConfig) -> GeneratedPaths:
     require(config.geometry_mode in {"static", "geometry-noop", "geometry"}, "geometry_mode must be static, geometry-noop, or geometry")
     require(config.runtime.profile in PROFILE_DURATIONS, f"Unknown runtime profile: {config.runtime.profile}")
+    if config.wettable_envelope:
+        require(config.geometry_mode == "geometry", "wettable_envelope=True requires geometry_mode='geometry'")
     data = build_geometry(config)
     control = config.control_root / config.name
     lab = config.lab_root / config.name
@@ -603,13 +721,17 @@ def build_generated_case(config: CaseConfig) -> GeneratedPaths:
     initial = generated_dir / f"{stem}_initial.nc"
     geometry = generated_dir / f"{stem}_geometry.nc"
     geometry_noop = generated_dir / f"{stem}_geometry_noop.nc"
-    topography = generated_dir / f"{stem}_topography_preview.nc"
+    topography_preview = generated_dir / f"{stem}_topography_preview.nc"
+    topography = generated_dir / f"{stem}_topog.nc"
     write_initial_file(initial, data)
-    write_geometry_file(geometry, data, noop=False)
-    write_geometry_file(geometry_noop, data, noop=True)
-    write_topography_file(topography, data)
+    write_geometry_file(geometry, data, noop=False, min_cavity_depth_m=config.transform.min_cavity_depth_m)
+    write_geometry_file(geometry_noop, data, noop=True, min_cavity_depth_m=config.transform.min_cavity_depth_m)
+    write_topography_file(topography_preview, data)
+    if config.wettable_envelope:
+        write_mom_topography_file(topography, data, min_cavity_depth_m=config.transform.min_cavity_depth_m)
 
     initial_rel = f"generated_geometry/{initial.name}"
+    topography_rel = f"generated_geometry/{topography.name}" if config.wettable_envelope else None
     if config.geometry_mode == "static":
         geometry_rel = None
         selected_geometry = None
@@ -620,7 +742,10 @@ def build_generated_case(config: CaseConfig) -> GeneratedPaths:
         geometry_rel = f"generated_geometry/{geometry.name}"
         selected_geometry = geometry
 
-    (control / "MOM_override.generated").write_text(_generated_override(config, data, initial_rel, geometry_rel), encoding="utf-8")
+    (control / "MOM_override.generated").write_text(
+        _generated_override(config, data, initial_rel, geometry_rel, topography_rel),
+        encoding="utf-8",
+    )
     input_nml = (control / "input.nml").read_text(encoding="utf-8")
     input_nml = _replace_nml_duration(input_nml, config.runtime.profile)
     input_nml = _replace_parameter_files(input_nml, ("MOM_input", "MOM_override.generated"))
@@ -649,18 +774,30 @@ def build_generated_case(config: CaseConfig) -> GeneratedPaths:
             "name": config.name,
             "ocean_case": config.ocean_case,
             "geometry_mode": config.geometry_mode,
+            "wettable_envelope": config.wettable_envelope,
             "profile": config.runtime.profile,
             "control": str(control),
             "lab": str(lab),
         },
         "geometry": geometry_summary(data),
+        "wettable_envelope": wettable_envelope_summary(data, config.transform.min_cavity_depth_m) if config.wettable_envelope else None,
         "warnings": list(data.warnings),
         "commands": payu_commands(control, lab),
         "selected_geometry": str(selected_geometry) if selected_geometry else None,
+        "selected_topography": str(topography) if config.wettable_envelope else None,
     }
     summary_json = generated_dir / f"{stem}_summary.json"
     summary_json.write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    return GeneratedPaths(control, lab, initial, geometry, geometry_noop if config.geometry_mode != "static" else None, topography, summary_json)
+    return GeneratedPaths(
+        control,
+        lab,
+        initial,
+        geometry,
+        geometry_noop if config.geometry_mode != "static" else None,
+        topography_preview,
+        topography if config.wettable_envelope else None,
+        summary_json,
+    )
 
 
 def payu_commands(control: Path, lab: Path) -> list[str]:
