@@ -22,7 +22,7 @@ Preparation checks passed in an isolated scratch copy with Payu 1.3.2:
 - The archive hook correctly renames a synthetic MOM output file, preserves stream content and metadata, and removes loose streams after creating their tar archive.
 - `payu sweep` removes only the isolated staged work directory.
 
-Logs and machine-readable checks are retained under `provenance/`. The smoke profile has been staged, not newly integrated.
+A fresh Git clone of runtime commit `2866f9d` also passes the documented setup command and checksum check, with a clean working tree after staging. Logs and machine-readable checks are retained under `provenance/`. The smoke profile has been staged, not newly integrated.
 
 ## Existing numerical evidence — 8–9 June 2026
 

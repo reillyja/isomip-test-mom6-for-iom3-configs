@@ -1,0 +1,8 @@
+laboratory path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/clone-lab
+binary path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/clone-lab/bin
+input path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/clone-lab/input
+work path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/clone-lab/work
+archive path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/clone-lab/archive
+Metadata and UUID generation is disabled. Experiment name used for archival: clone
+Removing work path /scratch/au88/jr5971/med-ocn-share-check-20261022/clone-lab/work/clone
+Removing symlink /scratch/au88/jr5971/med-ocn-share-check-20261022/clone/work

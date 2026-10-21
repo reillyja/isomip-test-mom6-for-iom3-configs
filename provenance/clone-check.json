@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "tested_runtime_commit": "2866f9de4cf255cc94c64c76000de6a26ef99962",
+  "fresh_git_clone": true,
+  "documented_payu_setup_command": true,
+  "no_untracked_dependency_files": true,
+  "working_tree_clean_after_setup": true,
+  "model_run_submitted": false
+}
