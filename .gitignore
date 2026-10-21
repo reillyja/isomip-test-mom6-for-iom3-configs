@@ -1,0 +1,3 @@
+# Keep local Markdown notes out of public branches; retain README files.
+*.md
+!README.md
