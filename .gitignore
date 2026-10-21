@@ -9,3 +9,7 @@ manifests/
 *.e[0-9]*
 __pycache__/
 *.pyc
+
+# Keep local Markdown notes out of public branches; retain README files.
+*.md
+!README.md
