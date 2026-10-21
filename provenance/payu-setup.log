@@ -1,0 +1,19 @@
+laboratory path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab
+binary path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/bin
+input path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/input
+work path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/work
+archive path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/archive
+Metadata and UUID generation is disabled. Experiment name used for archival: control
+payu: Found modules in /opt/Modules/v4.3.0
+Loading access-om3/2026.03.000
+  Loading requirement: access3-share/2026.03.000-y36qia2
+    access-cice/CICE6.6.3-0-ln3b7du access-mocsy/2025.07.002-i36gtb3
+    access-generic-tracers/2026.02.001-p7ajf4x access-mom6/2026.01.001-pqwd5dm
+    access-ww3/2026.03.000-o2igtey access3/2026.03.000-vwmpe5w
+Setting up access-om3
+Checking exe, input and restart manifests
+Writing manifests/input.yaml
+Writing manifests/restart.yaml
+Writing manifests/exe.yaml
+Patched staged ocean-only runtime settings in work/nuopc.runconfig
+/usr/bin/python3 tools/patch_ocean_only_runconfig.py

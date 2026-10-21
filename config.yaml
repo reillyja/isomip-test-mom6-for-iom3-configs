@@ -1,6 +1,5 @@
 project: au88
 shortpath: /scratch/au88
-laboratory: access-om3-isomip-nuopc
 
 modules:
     use:
@@ -31,7 +30,7 @@ collate: false
 
 userscripts:
     setup: /usr/bin/python3 tools/patch_ocean_only_runconfig.py
-    archive: /usr/bin/bash /g/data/vk83/apps/om3-scripts/payu_config/archive.sh
+    archive: /usr/bin/bash tools/archive.sh
 
 qsub_flags: -W umask=027
 

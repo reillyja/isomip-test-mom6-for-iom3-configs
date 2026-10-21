@@ -1,0 +1,45 @@
+{
+  "description": "June MED OCN static-shelf control, unchanged physics and input bytes",
+  "control_source_commit": "a9fd74a4a4d1d43230598f4708b631ad36d974bf",
+  "control_source_branch": "nuopc-isomip-zero-forcing",
+  "executable": {
+    "path": "/g/data/au88/jr5971/access3-share-isomip/install-mom6-isomip/bin/access-om3-MOM6",
+    "sha256": "6d9cb9566606019b6c690a7c12cbbc7a82840ea248ff08d3578d7411fbc32777"
+  },
+  "MOM6_historical_base_commit": "c664721ebd58c033964b502e7fcdcccd05f02947",
+  "MOM6_historical_base_tag": "2026.01.001",
+  "ACCESS3_commit": "825a3f4835bb088b12f68babe0149b017b16ba72",
+  "source_note": "June MOM6 changes were uncommitted; the present source worktree contains later work and is not an exact June source snapshot.",
+  "inputs": {
+    "INPUT/JRA55do-datm-ESMFmesh.nc": "48c346dd0261257fb10c600e42fcb123ea0a1cecd33f7b452cdfd507a123e5fb",
+    "INPUT/JRA55do-datm-cavitymasked-ESMFmesh.nc": "0a3af77e8471d6e465e654a0a5c5541c417905b461e1811cbdcf63eb3d1856e4",
+    "INPUT/JRA55do-drof-ESMFmesh.nc": "48c346dd0261257fb10c600e42fcb123ea0a1cecd33f7b452cdfd507a123e5fb",
+    "INPUT/JRA55do-drof-cavitymasked-ESMFmesh.nc": "0a3af77e8471d6e465e654a0a5c5541c417905b461e1811cbdcf63eb3d1856e4",
+    "INPUT/Ocean0_3D_Claire.nc": "42fcbf551e302f3e4ab93f236d083fe18667117760e74e7a74da409b2524c8cc",
+    "INPUT/RYF.friver.1990_1991.nc": "97f44ab44a65cb87c2b74000ff9ed016dad3fe4902d551d51f6d193d782bcf9e",
+    "INPUT/RYF.huss.1990_1991.nc": "04615dcc635ea464f5f0805d3767686c0f49be0a859dd03e430a9949fa0321c9",
+    "INPUT/RYF.licalvf.1990_1991.nc": "9aa3e237b9114452569a7f04824c79f3f72956534cc3c41dd280ec3710998a41",
+    "INPUT/RYF.prra.1990_1991.nc": "f6ab12583af4e7545d66feb086b6550780f59d39dd1e0372dd8103eed8f96f3f",
+    "INPUT/RYF.prsn.1990_1991.nc": "055c343a44bc3282c69fb6f2421a78e3500c64a5004119833063e74f1ea5a829",
+    "INPUT/RYF.psl.1990_1991.nc": "c4ec06f968aa6042e521263c8649a600478e3425e2f0a86bf84626adf715b964",
+    "INPUT/RYF.rlds.1990_1991.nc": "063cee878d8cfc55e3b6a6a0b5c453171eb6318d84eb0bd1e9c9058a87ac6c31",
+    "INPUT/RYF.rsds.1990_1991.nc": "ced38f4afd3a2e8171cd65070c5b5342a6fa34b94397ec99ee90b9c4376d85af",
+    "INPUT/RYF.tas.1990_1991.nc": "05fb213140c1dddbc9cf088d49f3501be36e6852698f95b02b4100f5adc84920",
+    "INPUT/RYF.uas.1990_1991.nc": "96a577557e593fa4922191b0eb242e6ef68ba9af391c9b405f4868132417f239",
+    "INPUT/RYF.vas.1990_1991.nc": "b1699787cb4601e97b0566ea65a17db436218a8b8c9e2dc5df94106c60e4385f",
+    "INPUT/access-om3-25km-ESMFmesh.nc": "48c346dd0261257fb10c600e42fcb123ea0a1cecd33f7b452cdfd507a123e5fb",
+    "INPUT/isomip_grid_for_mesh.nc": "f85e4135a0bd88306ff7185cd1a730b3977ef40421fb5cd7132f05f8b9fe887e"
+  },
+  "unchanged_reference_files": {
+    "MOM_input": "0dd31490104083f58e054c2bd03911ffdf9a16856b19fc1a4991b97243b9f5ab",
+    "MOM_override": "22671c8047313ebef878a377ea90762ee7630da2e803d29f6ddfc29eba2c3cd6",
+    "input.nml": "2b24669bd05b9710d82cfece9b8f84bbf58b43282ce3e7a740f258d8d95e3958",
+    "nuopc.runseq": "2920c5618de041038394a3b145dc4656d228fbb1685efd7dfbdc7aa5a359a8ff",
+    "fd.yaml": "de87e382aac1ad5c17221210a746ed8f1214b995dda753d19fd92d0aabb74ef6",
+    "diag_table": "22ae05cfc88c52f45f880fd40b38aa4cb944447be28126d70a8fb8e72dbbe21b"
+  },
+  "archive_helper_sources": {
+    "standardise_mom_filenames.py": "b2f39aacc90562e05764ad391b58e6394787bd7af83c68b17bed4aef0fa6c646",
+    "archive_esmf_streams.py": "bbe141bb0fb8a2022ad6f33dc1a1afc1babdfa86d3ffd9383e1ff3abc3ca607f"
+  }
+}

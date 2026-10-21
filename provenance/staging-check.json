@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "checks": {
+    "MED_OCN_only": true,
+    "ATM_is_stub": true,
+    "ROF_is_stub": true,
+    "zero_missing_imports": true,
+    "no_startup_lag": true,
+    "cold_start": true,
+    "48_ocean_ranks": true,
+    "1_mediator_rank": true,
+    "two_steps": true,
+    "no_real_restart_pointers": true,
+    "no_original_control_path": true,
+    "atm_bookkeeping_regular": true,
+    "rof_bookkeeping_regular": true,
+    "all_input_links_resolve": true
+  },
+  "work": "/scratch/au88/jr5971/med-ocn-share-check-20261022/lab/work/control",
+  "model_run_submitted": false
+}

@@ -1,0 +1,8 @@
+laboratory path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab
+binary path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/bin
+input path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/input
+work path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/work
+archive path:  /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/archive
+Metadata and UUID generation is disabled. Experiment name used for archival: control
+Removing work path /scratch/au88/jr5971/med-ocn-share-check-20261022/lab/work/control
+Removing symlink /scratch/au88/jr5971/med-ocn-share-check-20261022/control/work

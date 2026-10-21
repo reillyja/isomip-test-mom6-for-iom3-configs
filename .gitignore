@@ -1,8 +1,11 @@
-access-om3.err
-access-om3.out
+work
 archive
 env.yaml
-nuopc_isomip_oc.e*
-nuopc_isomip_oc.o*
-tools/__pycache__/
-work
+metadata.yaml
+manifests/
+*.out
+*.err
+*.o[0-9]*
+*.e[0-9]*
+__pycache__/
+*.pyc

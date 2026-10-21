@@ -1,8 +1,0 @@
-format: yamanifest
-version: 1.0
----
-work/access-om3-MOM6:
-  fullpath: /g/data/au88/jr5971/access3-share-isomip/install-mom6-isomip/bin/access-om3-MOM6
-  hashes:
-    binhash: b43f877a05099ba529bbd34ebfeb90fb
-    md5: 69d45364a056d436b4fc1fc44109388a

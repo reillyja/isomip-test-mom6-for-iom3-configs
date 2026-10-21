@@ -1,132 +1,13 @@
-# ISOMIP Through Stock CMEPS
+# Runtime and restart details
 
-This worktree runs ISOMIP through a locally built `access-om3-MOM6` with:
+The [README](README.md) is the quick start and [MOM cap notes](MOM_CAP_NOTES.md) explain the implementation.
 
-```text
-component_list: MED OCN
-ATM_model = satm
-ROF_model = srof
-```
+`component_list: MED OCN` runs a single mediator rank and 48 ocean ranks. All atmosphere/runoff imports are disconnected and initialized to zero by the patched cap. MOM6 retains internally calculated shelf pressure, melting/freezing, drag and configured gustiness. Geometry is read directly by MOM6 and held fixed.
 
-There is no atmosphere or runoff component and no `MED -> OCN` transfer.
-Instead, the patched MOM6 cap uses:
+The checked-in `nuopc.runconfig` uses `ATM_model=datm` and `ROF_model=drof` solely for Payu 1.3.2 compatibility. After Payu stages files, the setup hook changes the staged labels to `satm/srof`. It also creates regular `rpointer.atm`, `rpointer.rof` and corresponding `payu_stub.*.r` targets for Payu bookkeeping. They are not scientific restarts and are not read by CMEPS.
 
-```text
-zero_missing_imports = true
-```
+For a fresh experiment, use a new laboratory and `start_type=startup`. Payu manages continuation state when another segment is run in an existing laboratory. A complete real continuation needs the mediator and ocean restart/pointers and `Shelf.res.nc`, as well as the bookkeeping files expected by Payu. Do not add `input_filename='n'` to `input.nml`; it overrides the ocean filename provided by `rpointer.ocn` and prevents correct continuation.
 
-All missing atmosphere, radiation, stress, precipitation, runoff, pressure,
-and enthalpy imports are initialized to zero before connected fields are read.
-The cap checks that the resulting imports are finite and logs their extrema.
+The cold-start configuration has no saved restart manifest or pointers. New Payu manifests are generated locally and ignored by Git. The immutable baseline hashes live separately under `provenance/`.
 
-MOM6 still calculates ice-shelf pressure, melt/freeze, shelf heat exchange,
-drag, and configured gustiness internally.
-
-## Matched Runtime
-
-```text
-coupling interval: 300 seconds
-MOM6 DT:           300 seconds
-MOM6 DT_FORCING:   300 seconds
-layout:            16 x 3
-OCN ranks:         48
-MED ranks:         1
-total ranks:       49
-```
-
-`apply_startup_lag=false` makes every driver cycle advance MOM6 by 300
-seconds. This is required for exact parity with `mom6-solo`.
-
-## Payu Compatibility
-
-Payu 1.3.2 requires `datm/drof` in the checked-in `access-om3` control file.
-The setup hook `tools/patch_ocean_only_runconfig.py` changes only the staged
-`work/nuopc.runconfig` to `satm/srof`.
-
-The hook also creates tiny regular `rpointer.atm`, `rpointer.rof`, and
-corresponding Payu stub restart files. These satisfy Payu staging and archival
-checks for absent components; CMEPS does not read them.
-
-Inspect the actual staged configuration:
-
-```bash
-module use /g/data/vk83/modules
-module load payu/1.3.2
-
-payu sweep
-payu setup
-grep -E 'component_list|ATM_model|ROF_model|zero_missing_imports|apply_startup_lag' \
-  work/nuopc.runconfig
-payu sweep
-```
-
-## Run
-
-```bash
-python3 tools/set_duration_profile.py smoke
-python3 tools/set_duration_profile.py day
-python3 tools/set_duration_profile.py month
-python3 tools/set_duration_profile.py 45-day
-python3 tools/set_duration_profile.py three-month
-```
-
-Example 90-day run:
-
-```bash
-python3 tools/set_duration_profile.py three-month
-payu run -f -n 1 \
-  -l /scratch/au88/jr5971/isomip-comparison/cmeps-three-month
-```
-
-## Restart
-
-```bash
-LAB=/scratch/au88/jr5971/isomip-comparison/cmeps-three-month-split
-python3 tools/set_duration_profile.py 45-day
-
-payu run -f -n 1 -l "$LAB"
-
-# Run after output000/restart000 have been archived.
-payu run -f -n 1 -l "$LAB"
-```
-
-The final archive must contain:
-
-```text
-restart001/rpointer.cpl
-restart001/rpointer.ocn
-restart001/nuopc_isomip.cpl.r.1900-04-01-00000.nc
-restart001/nuopc_isomip.mom6.r.1900-04-01-00000.nc
-restart001/Shelf.res.nc
-```
-
-Do not set `input_filename='n'` in `input.nml`; it overrides the rpointer
-filename supplied by the cap and prevents continuation from reading the
-correct restart.
-
-## Validation
-
-The June 9, 2026 tests passed for smoke, one day, one month, and 90 days.
-The 45+45-day continuation is bitwise identical to the 90-day continuous run
-for:
-
-- 21 common numeric MOM6 restart variables;
-- three shelf restart variables;
-- 23 common numeric CMEPS coupler restart variables.
-
-At 90 days, temperature, salinity, velocity, layer/interface height, surface
-forcing, and ice-shelf diagnostics are bitwise identical to both
-`mom6-solo` and the toy mediator.
-
-Comparison tools:
-
-```bash
-python3 tools/compare_nuopc_outputs.py REFERENCE.nc CANDIDATE.nc
-python3 tools/compare_restarts.py CONTINUOUS.nc SPLIT.nc
-```
-
-The complete commands, hashes, result paths, and test matrix are in:
-
-```text
-/g/data/au88/jr5971/isomip-test-mom6-for-iom3-configs/ISOMIP_THREE_PATH_RUNBOOK.md
-```
+The existing June comparisons used different calendar epochs for solo and NUOPC (year 1 versus year 1900). Compare by elapsed time. The sharing default is a two-step smoke, not the historical 90-day duration; use `tools/set_duration_profile.py three-month` in a new experiment to select that duration.
