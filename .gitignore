@@ -6,3 +6,7 @@ nuopc_isomip_oc.e*
 nuopc_isomip_oc.o*
 tools/__pycache__/
 work
+
+# Keep local Markdown notes out of public branches; retain README files.
+*.md
+!README.md
